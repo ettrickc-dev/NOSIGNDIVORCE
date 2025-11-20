@@ -65,6 +65,12 @@ textarea{min-height:90px;resize:vertical;}
         New York default divorce packet so you can file, serve your spouse properly, wait the required time,
         and get your final divorce judgment.
       </div>
+      <div class="small" style="margin-top:8px;">
+        This uncontested divorce is for situations where your spouse <strong>refuses to sign</strong> but you
+        <strong>do not expect them to fight or contest the divorce in court</strong>. The app prepares
+        <strong>all of the documents you need</strong> to get divorced by default judgment in this situation and
+        includes <strong>clear, plain-English step-by-step instructions</strong> on exactly what to file and when.
+      </div>
       <div class="badge-nosign">✅ Spouse does <u>not</u> sign the papers</div>
       <div class="okline" id="streak"></div>
 
@@ -106,7 +112,10 @@ textarea{min-height:90px;resize:vertical;}
 
     <!-- REQUIREMENTS / CONTACT -->
     <div class="card value-prop">
-      <div class="trust-badge">✅ Full NO SIGN Default Packet: $99 Secure Download (Summons &amp; Complaint Always Free)</div>
+      <div class="trust-badge">
+        ✅ Full NO SIGN Default Packet: <strong>$1 test price</strong> for all remaining documents
+        (Summons &amp; Complaint is always <strong>free</strong> while you review).
+      </div>
       <h3>1. Quick Requirements Check (NO SIGN Default Divorce)</h3>
       <div class="small">
         By proceeding, you confirm:
@@ -116,7 +125,7 @@ textarea{min-height:90px;resize:vertical;}
           <li>You do <strong>not</strong> have a contested fight over marital assets in this divorce packet.</li>
           <li>You have a good address where your spouse can be personally <strong>served in person</strong> by another adult.</li>
         </ul>
-        Your spouse <strong>does not sign</strong> these forms. You proceed by service and default instead.
+        Your spouse <strong>does not sign</strong> these forms. You proceed by <strong>service and default</strong> instead.
       </div>
       <div class="grid cols-2" style="margin-top:10px">
         <div>
@@ -273,7 +282,7 @@ textarea{min-height:90px;resize:vertical;}
         </div>
       </div>
 
-      <div class="row" style="margin-top:25px">
+      <div class="row" style="margin-top:25px;">
         <button class="btn good block" id="gen">4. Generate Initial Documents</button>
       </div>
       <div class="err" id="e2">🛑 Please complete all *required* fields in Step 3.</div>
@@ -293,21 +302,28 @@ textarea{min-height:90px;resize:vertical;}
             Download — Summons &amp; Complaint (File to START Case)
           </button>
 
-          <!-- FULL PACKAGE — PAYWALLED AT $99 -->
+          <!-- FULL PACKAGE — PAYWALLED AT $1 -->
           <div id="gd" class="download-buttons" style="margin-top:25px;">
-            <h3 style="margin-top:5px;">🎉 Full NO SIGN Default Package (All Documents — $99)</h3>
+            <h3 style="margin-top:5px;">🎉 Full NO SIGN Default Package (All Documents — $1 Test Price)</h3>
             <div class="small" style="margin-bottom:10px; font-size:1.05rem;">
-              Pay once to unlock <strong>all completed court forms</strong> (documents 2–11). Your
-              <strong>answers</strong> will be emailed to you and to the attorney at <strong>ettrickc@gmail.com</strong>.
+              Pay <strong>$1</strong> once to unlock <strong>all completed court forms</strong> you need to
+              <strong>get divorced without your spouse signing the divorce papers</strong> (documents 2–11), plus
+              clear, step-by-step instructions. Your <strong>answers</strong> will be emailed to you and to the
+              attorney at <strong>ettrickc@gmail.com</strong>.
             </div>
 
             <!-- PayPal Button Container -->
             <div style="margin:10px 0 20px;">
-              <div class="small" style="margin-bottom:6px;"><strong>Step 1:</strong> Complete the secure $99 payment:</div>
+              <div class="small" style="margin-bottom:6px;">
+                <strong>Step 1:</strong> Complete the secure <strong>$1</strong> payment:
+              </div>
               <div id="paypal-button-container"></div>
             </div>
 
-            <div class="small" style="margin-bottom:10px;"><strong>Step 2:</strong> After payment, download any document below or use “Download All”.</div>
+            <div class="small" style="margin-bottom:10px;">
+              <strong>Step 2:</strong> After payment, download any document below or use “Download All” for your
+              full NO SIGN divorce packet and instructions.
+            </div>
 
             <div class="grid cols-2">
               <button class="btn next block" data-doc="COMPLAINT">1. Summons &amp; Complaint (For Filing)</button>
@@ -349,7 +365,7 @@ textarea{min-height:90px;resize:vertical;}
 
 <script>
 /* ===================== EMAIL CONFIG (UPDATE THIS URL) ===================== */
-const EMAIL_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwm_xQsgkc5NfwbTvOqTI3AcQu9o_d015YFEoiOvt_esUooqPbQ2VtWQHo5ODbfxV8E/exec"; // <-- REPLACE with your Apps Script /exec URL
+const EMAIL_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwm_xQsgkc5NfwbTvOqTI3AcQu9o_d015YFEoiOvt_esUooqPbQ2VtWQHo5ODbfxV8E/exec";
 const OWNER_EMAIL       = "ettrickc@gmail.com";
 /* ============================================================================ */
 
@@ -399,7 +415,6 @@ function xmlEscape(v){
   return String(v||'')
     .replace(/&/g,'&amp;')
     .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&apos;');
 }
@@ -635,7 +650,7 @@ async function buildAndDownloadDoc(fileKey,payload){
 
 /* ================== EMAIL SENDER (WEBHOOK) ================== */
 async function sendCompletionEmail(payload) {
-  if (!EMAIL_WEBHOOK_URL || EMAIL_WEBHOOK_URL.includes("YOUR_WEB_APP_ID")) {
+  if (!EMAIL_WEBHOOK_URL) {
     console.warn("EMAIL_WEBHOOK_URL not configured; skipping email send.");
     return;
   }
@@ -715,7 +730,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   $('gen').addEventListener('click',()=>{
     if(!vStep2()){
       $('e2').style.display='block';
-      toast("🛑 Please complete all required fields in Step 3, including who will serve your spouse.",false);
+      toast("🛑 Please complete all *required* fields in Step 3, including who will serve your spouse.",false);
       return;
     }
     $('e2').style.display='none';
@@ -767,7 +782,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       const payload=collectPayload();
 
       if(doc !== 'COMPLAINT' && !fullPackagePaid){
-        toast("Please complete the $99 payment to unlock these documents.", false);
+        toast("Please complete the $1 payment to unlock these documents.", false);
         return;
       }
       await buildAndDownloadDoc(doc,payload);
@@ -777,7 +792,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Download All button (requires payment)
   $('downloadAll').addEventListener('click',async ()=>{
     if(!fullPackagePaid){
-      toast("Please complete the $99 payment to download all documents.", false);
+      toast("Please complete the $1 payment to download all documents.", false);
       return;
     }
     await downloadAllDocs(collectPayload());
@@ -795,8 +810,8 @@ document.addEventListener('DOMContentLoaded',()=>{
       createOrder: (data, actions) => {
         return actions.order.create({
           purchase_units: [{
-            amount: { value: '99.00', currency_code: 'USD' },
-            description: 'NY NO SIGN Default Divorce – Full Packet'
+            amount: { value: '1.00', currency_code: 'USD' },
+            description: 'NY NO SIGN Default Divorce – Full Packet (Test $1 Price)'
           }]
         });
       },
@@ -820,4 +835,5 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
 
